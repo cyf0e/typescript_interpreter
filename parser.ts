@@ -1,6 +1,5 @@
-import { Token, TokenType, tokens } from './token'
-import { Lexer } from './lexer'
-import { Statement, Expression, InfixExpression, Precedance, LetStatement, IfStatement, StatementBlock, ElseStatement, ElifStatement } from './parsers/parserUtils'
+import { TokenType, tokens } from './token'
+import { Statement, Expression, InfixExpression, Precedance } from './parsers/parserUtils'
 import { NumberLiteralParser, ParenthesesParser, GenericPrefixParser, StringLiteralParser } from './parsers/prefixParsers'
 import { GenericInfixParser } from './parsers/infixParsers'
 import { parseElseStatement, parseFunctionStatement, parseIfStatement, parseLetStatement, parseReturnStatement } from './parsers/statementParsers'
@@ -27,7 +26,6 @@ export class Parser {
 		this.addPrefix(tokens.STRING, StringLiteralParser.bind(this))
 
 		this.addInfix(tokens.PLUS, GenericInfixParser.bind(this))
-
 		this.addInfix(tokens.MINUS, GenericInfixParser.bind(this))
 		this.addInfix(tokens.ASTERISK, GenericInfixParser.bind(this))
 		this.addInfix(tokens.FRONT_SLASH, GenericInfixParser.bind(this))
@@ -83,10 +81,6 @@ export class Parser {
 	}
 	//default precedance is lowest
 	parseExpression(precedance: number = Precedance.LOWEST) {
-		//-1+2+3*8
-		//left=-1
-		//((-1)+2)+(3*8)
-		//8*1+2+3
 		let left = this.parsePrefix()
 		while (this.getToken() && this.getToken().value != tokens.SEMICOLON && this.getPrecedance(this.getToken()) > precedance && this.getToken().value != tokens.COMMA) {
 			left = this.parseInfix(left, this.getPrecedance(this.getToken()))
