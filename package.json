@@ -4,12 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run compile && npx mocha ./build/tests --timeout 2000",
+    "compile": "npx tsc"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^18.16.1",
+    "mocha": "^10.2.0",
     "typescript": "^5.0.4"
   }
 }

@@ -1,47 +1,61 @@
-export class Token{
+export interface TokenType {
+	type: string
+	value: string
 
-	type:tokenType|undefined	
-	value:string|number|undefined
-	constructor(type:tokenType|undefined,value:string|number|undefined){
-		this.type=type
-		this.value=value
+}
+export class Token implements TokenType {
+	type
+	value
+	constructor(type: string, value: string) {
+		this.type = type
+		this.value = value
 	}
 }
-const keywords={
-	LET:'let',
-	FUNCTION:'function',
-	RETURN:'return'
+const keywords = {
+	LET: 'let',
+	FUNCTION: 'function',
+	RETURN: 'return',
+	IF: 'if',
+	ELSE: 'else',
+	ELSEIF: 'elif'
 }
-export const tokens={
+export const tokens = {
 	//special tokens
-	ILLEGAL:'ILLEGAL',
-	EOF:'EOF',
-	
+	ILLEGAL: 'ILLEGAL',
+	EOF: 'EOF',
+
 	//identifiers
-	IDENTIFIER:'IDENTIFIER',
+	IDENTIFIER: 'IDENTIFIER',
 
 	//literals
-	NUMBER:'NUMBER',
+	NUMBER: 'NUMBER',
+	STRING: 'STRING',
 
 	//operators
-	PLUS:'+',
-	ASSIGN:'=',
-	MINUS:'-',
-	ASTERISK:'*',
-	FRONT_SLASH:'/',
-	EXCLAMATION_MARK:'!',
-	GREATER_THAN:'>',
-	LESS_THAN:'<',
+	PLUS: '+',
+	ASSIGN: '=',
+	MINUS: '-',
+	ASTERISK: '*',
+	FRONT_SLASH: '/',
+	EXCLAMATION_MARK: '!',
+	GREATER_THAN: '>',
+	LESS_THAN: '<',
+	LESSEQUAL_THAN: '<=',
+	GREATEREQUAL_THAN: '>=',
+	EQUALS: '==',
+	NOT_EQUAL: '!=',
+	LOG_OR: '|',
+	LOG_AND: '&',
+
 	//delimiters
-	COMMA:',',
-	SEMICOLON:';',
-	LPAREN:'(',
-	RPAREN:')',
-	LBRACE:'{',
-	RBRACE:'}',
-	LSQUARE:'[',
-	RSQUARE:']',
+	COMMA: ',',
+	SEMICOLON: ';',
+	LPAREN: '(',
+	RPAREN: ')',
+	LBRACE: '{',
+	RBRACE: '}',
+	LSQUARE: '[',
+	RSQUARE: ']',
 	...keywords
 }
-export const keywordMap=new Map(Object.entries(keywords).map(kv=>{return [kv[1],kv[0]]}))
-export type tokenType=typeof tokens[keyof typeof tokens]
+export const keywordMap = new Map(Object.entries(keywords).map(kv => { return [kv[1], kv[0]] }))
