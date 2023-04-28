@@ -1,6 +1,6 @@
 import { TokenType, tokens } from './token'
 import { Statement, Expression, InfixExpression, Precedance } from './parsers/parserUtils'
-import { NumberLiteralParser, ParenthesesParser, GenericPrefixParser, StringLiteralParser } from './parsers/prefixParsers'
+import { NumberLiteralParser, ParenthesesParser, GenericPrefixParser, StringLiteralParser, IdentifierParser } from './parsers/prefixParsers'
 import { GenericInfixParser } from './parsers/infixParsers'
 import { parseElseStatement, parseFunctionStatement, parseIfStatement, parseLetStatement, parseReturnStatement } from './parsers/statementParsers'
 
@@ -24,6 +24,7 @@ export class Parser {
 		this.addPrefix(tokens.MINUS, GenericPrefixParser.bind(this))
 		this.addPrefix(tokens.LPAREN, ParenthesesParser.bind(this))
 		this.addPrefix(tokens.STRING, StringLiteralParser.bind(this))
+		this.addPrefix(tokens.IDENTIFIER, IdentifierParser.bind(this))
 
 		this.addInfix(tokens.PLUS, GenericInfixParser.bind(this))
 		this.addInfix(tokens.MINUS, GenericInfixParser.bind(this))

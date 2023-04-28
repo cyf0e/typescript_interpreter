@@ -1,8 +1,8 @@
-import assert, { deepEqual } from "node:assert";
+import assert from "node:assert";
 import { tokens, Token } from "../token";
 import { Lexer } from "../lexer";
 import { Parser } from "../parser";
-import { ElseStatement, IfStatement, LetStatement, Precedance, StatementBlock, Statement, Expression, FunctionStatement, NumberLiteral, InfixExpression, StringLiteral, ReturnStatement } from "../parsers/parserUtils";
+import { ElseStatement, IfStatement, LetStatement, Precedance, StatementBlock, Statement, Expression, FunctionStatement, NumberLiteral, InfixExpression, StringLiteral, ReturnStatement, FunctionCallExpression } from "../parsers/parserUtils";
 import { describe } from "node:test";
 
 const lexer = new Lexer()
@@ -84,7 +84,10 @@ describe("Parser", function() {
 			assert.deepEqual(xpect, real)
 		})
 		it('should parse function call arguments', function() {
-			assert('ok')
+			const parsed = parseCodeExpression('add(1,2);')
+			const identifier = new Token(tokens.IDENTIFIER, 'add')
+			const fCall = new FunctionCallExpression(identifier, [new NumberLiteral('1'), new NumberLiteral('2')])
+			assert.deepEqual(parsed, fCall)
 		})
 
 	})

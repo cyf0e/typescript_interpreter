@@ -55,72 +55,73 @@ export class PrefixExpression extends Expression {
 		this.right = right
 	}
 }
-export class StatementBlock implements Statement {
-	type
+export class StatementBlock extends Statement {
 	statements: Statement[]
 	constructor(statements: Statement[]) {
+		super('STATEMENT_BLOCK')
 		this.statements = statements
-		this.type = 'STATEMENT_BLOCK'
 	}
 }
-export class LetStatement implements Statement {
+export class LetStatement extends Statement {
 	identifier: TokenType
 	value: Expression
-	type
 	constructor(identifier: TokenType, value: Expression) {
+		super('LET_STATEMENT')
 		this.value = value
 		this.identifier = identifier
-		this.type = 'LET_STATEMENT'
 	}
 
 }
-export class IfStatement implements Statement {
-	type
+export class IfStatement extends Statement {
 	condition: Expression
 	body: StatementBlock
 	constructor(condition: Expression, body: StatementBlock) {
-		this.type = 'IF_STATEMENT'
+		super('IF_STATEMENT')
 		this.condition = condition
 		this.body = body
 	}
 }
-export class ElifStatement implements Statement {
-	type
+export class ElifStatement extends Statement {
 	condition: Expression
 	body: StatementBlock
 	constructor(condition: Expression, body: StatementBlock) {
-		this.type = 'ELIF_STATEMENT'
+		super('ELIF_STATEMENT')
 		this.condition = condition
 		this.body = body
 	}
 }
-export class ElseStatement implements Statement {
-	type
+export class ElseStatement extends Statement {
 	body: StatementBlock
 	constructor(body: StatementBlock) {
-		this.type = 'ELSE_STATEMENT'
+		super('ELSE_STATEMENT')
 		this.body = body
 	}
 }
-export class FunctionStatement implements Statement {
-	type
+export class FunctionStatement extends Statement {
 	identifier: Token
 	args: Expression[]
 	body: Statement[]
 	constructor(identifier: Token, args: Expression[], body: Statement[]) {
-
+		super('FUNCTION_STATEMENT')
 		this.identifier = identifier
 		this.args = args
 		this.body = body;
-		this.type = 'FUNCTION_STATEMENT'
 	}
 
 }
-export class ReturnStatement implements Statement {
-	type
+export class FunctionCallExpression extends Expression {
+	identifier: Token
+	args: Expression[]
+	constructor(identifier: Token, args: Expression[]) {
+		super('FUNCTION_CALL', identifier.value)
+		this.identifier = identifier
+		this.args = args
+	}
+}
+export class ReturnStatement extends Statement {
 	value: Expression
 	constructor(value: Expression) {
+		super('RETURN_STATEMENT')
 		this.value = value
-		this.type = 'RETURN_STATEMENT'
 	}
 }

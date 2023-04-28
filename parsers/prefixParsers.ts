@@ -1,6 +1,7 @@
-import { Precedance, Expression, PrefixExpression, NumberLiteral, StringLiteral } from "./parserUtils"
+import { Precedance, Expression, PrefixExpression, NumberLiteral, StringLiteral, FunctionCallExpression } from "./parserUtils"
 import { tokens } from "../token"
 import { Parser } from "../parser"
+import { parseArgumentList } from "./statementParsers"
 export function NumberLiteralParser(this: Parser) {
 	const token = this.consumeToken()
 	const literal: Expression = new NumberLiteral(token.value)
@@ -8,6 +9,18 @@ export function NumberLiteralParser(this: Parser) {
 }
 export function StringLiteralParser(this: Parser) {
 	return new StringLiteral(this.consumeToken().value)
+}
+export function IdentifierParser(this: Parser) {
+	if (this.getAfterToken().value == tokens.LPAREN) {
+		return FunctionCallParser.bind(this)()
+	}
+	return new Expression(tokens.IDENTIFIER, this.getToken().value)
+}
+export function FunctionCallParser(this: Parser) {
+	const ident = this.consumeToken()
+	const args = parseArgumentList.bind(this)()
+
+	return new FunctionCallExpression(ident, args)
 }
 export function ParenthesesParser(this: Parser) {
 	this.incrementToken()
