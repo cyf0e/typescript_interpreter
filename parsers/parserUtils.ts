@@ -1,7 +1,9 @@
-import { Token, TokenType } from "../token"
+import { Token } from "../token"
 
 export const Precedance: { [key: string]: number } = {
 	LOWEST: 1,
+	'<': 2,
+	'>': 2,
 	'==': 2,
 	'<=': 2,
 	'>=': 2,
@@ -63,9 +65,9 @@ export class StatementBlock extends Statement {
 	}
 }
 export class LetStatement extends Statement {
-	identifier: TokenType
+	identifier: Token
 	value: Expression
-	constructor(identifier: TokenType, value: Expression) {
+	constructor(identifier: Token, value: Expression) {
 		super('LET_STATEMENT')
 		this.value = value
 		this.identifier = identifier
@@ -100,8 +102,8 @@ export class ElseStatement extends Statement {
 export class FunctionStatement extends Statement {
 	identifier: Token
 	args: Expression[]
-	body: Statement[]
-	constructor(identifier: Token, args: Expression[], body: Statement[]) {
+	body: StatementBlock
+	constructor(identifier: Token, args: Expression[], body: StatementBlock) {
 		super('FUNCTION_STATEMENT')
 		this.identifier = identifier
 		this.args = args

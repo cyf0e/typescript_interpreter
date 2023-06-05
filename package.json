@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npm run compile && npx mocha ./build/tests --timeout 2000",
+    "test": "npm run compile && npx mocha ./build/tests --exit --check-leaks",
     "compile": "npx tsc"
   },
   "keywords": [],

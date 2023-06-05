@@ -32,6 +32,11 @@ describe("Parser", function() {
 			assert.deepEqual(parsed, IE('+', NL(1), IE('*', NL(2), NL(3))))
 
 		})
+		it('should parse infix operators with identifiers as operands', function() {
+			const parsed = parseCodeExpression('a+b')
+			const expect = IE('+', new Expression(tokens.IDENTIFIER, 'a'), new Expression(tokens.IDENTIFIER, 'b'))
+			assert.deepEqual(parsed, expect)
+		})
 	})
 	describe('LET STATEMENT', function() {
 		it('should parse let statement', function() {
@@ -80,19 +85,32 @@ describe("Parser", function() {
 			const real = parseCodeStatement('return 1+2;')
 			assert.deepEqual(real, expected)
 		})
+		it('should parse return statements with identifiers', function() {
+			const parsed = parseCodeStatement('return a;')
+			const expect = new ReturnStatement(new Expression(tokens.IDENTIFIER, 'a'))
+			assert.deepEqual(parsed, expect)
+		})
 	})
 	describe('FUNCTION STATEMENT', function() {
 		it('should return a function statement', function() {
 			const args: Expression[] = [NL(1), NL(2)]
-			const body: Statement[] = [new LetStatement(new Token(tokens.IDENTIFIER, 'a'), NL(12))]
+			const body: StatementBlock = new StatementBlock([new LetStatement(new Token(tokens.IDENTIFIER, 'a'), NL(12))])
 			const identifier: Token = new Token(tokens.IDENTIFIER, 'foo')
 			const xpect = [new FunctionStatement(identifier, args, body)]
 			const real = parser.loadTokens(lexer.loadString('function foo(1,2){let a=12;}').lex()).parse()
 			assert.deepEqual(xpect, real)
 		})
+
+		it('should parse function definition with return statement', function() {
+			const parsed = parseCodeStatement('function add(a,b){return a+b;}')
+			const ident = new Token(tokens.IDENTIFIER, 'add')
+			const args = [new Expression(tokens.IDENTIFIER, 'a'), new Expression(tokens.IDENTIFIER, 'b')]
+			const body = new StatementBlock([new ReturnStatement(IE('+', args[0], args[1]))])
+			assert.deepEqual(parsed, new FunctionStatement(ident, args, body))
+		})
 		it('should parse string literal arguments', function() {
 			const args: Expression[] = [new StringLiteral('Hello. Its me')]
-			const body: Statement[] = [new LetStatement(new Token(tokens.IDENTIFIER, 'a'), NL(12))]
+			const body: StatementBlock = new StatementBlock([new LetStatement(new Token(tokens.IDENTIFIER, 'a'), NL(12))])
 			const identifier: Token = new Token(tokens.IDENTIFIER, 'foo')
 			const xpect = [new FunctionStatement(identifier, args, body)]
 			const real = parser.loadTokens(lexer.loadString('function foo("Hello. Its me"){let a=12;}').lex()).parse()
@@ -111,6 +129,22 @@ describe("Parser", function() {
 			const expect = IE('+', NL(1), IE('*', fcall, NL(2)))
 			assert.deepEqual(parsed, expect)
 		})
+		//write test for parse statementBlock
+
+		it('should parse a regular statement block', function() {
+			const parsed = parseCodeStatement('{return 1}')
+			const retStatement = new ReturnStatement(NL(1))
+			const expect = new StatementBlock([retStatement])
+			assert.deepEqual(parsed, expect)
+		})
+		it('should parse a nested statement block', function() {
+			const parsed = parseCodeStatement('{{let a=3;}return 1;}')
+			const retStatement = new ReturnStatement(NL(1))
+			const letStatement = new LetStatement(new Token(tokens.IDENTIFIER, 'a'), NL(3));
+			const expect = new StatementBlock([new StatementBlock([letStatement]), retStatement])
+			assert.deepEqual(parsed, expect)
+		})
+
 
 	})
 })

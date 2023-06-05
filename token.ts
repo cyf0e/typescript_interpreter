@@ -1,11 +1,7 @@
-export interface TokenType {
+
+export class Token {
 	type: string
 	value: string
-
-}
-export class Token implements TokenType {
-	type
-	value
 	constructor(type: string, value: string) {
 		this.type = type
 		this.value = value

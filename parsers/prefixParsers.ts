@@ -11,10 +11,11 @@ export function StringLiteralParser(this: Parser) {
 	return new StringLiteral(this.consumeToken().value)
 }
 export function IdentifierParser(this: Parser) {
-	if (this.getAfterToken().value == tokens.LPAREN) {
+	const afterToken = this.getAfterToken()
+	if (afterToken && afterToken.value == tokens.LPAREN) {
 		return FunctionCallParser.bind(this)()
 	}
-	return new Expression(tokens.IDENTIFIER, this.getToken().value)
+	return new Expression(tokens.IDENTIFIER, this.consumeToken().value)
 }
 export function FunctionCallParser(this: Parser) {
 	const ident = this.consumeToken()
