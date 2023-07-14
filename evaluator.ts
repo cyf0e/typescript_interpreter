@@ -342,7 +342,6 @@ export class Evaluator {
       case "BooleanLiteral":
         return expression.value;
       default:
-        console.log(expression);
         throw new Error(`${expression.type} not supported`);
     }
   }
