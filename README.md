@@ -1,3 +1,3 @@
 # typescript_interpreter
-An unfinished interpreter written in typescript following the book by Thorsten Ball.
 
+An basic interpreter written in typescript following the book by Thorsten Ball. Currently only supports evaluation of if,let,function,return statements.
